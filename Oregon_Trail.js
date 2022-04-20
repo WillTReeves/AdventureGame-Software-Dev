@@ -89,7 +89,18 @@ function loadGame(){
         else if(upPressed) {
             console.log("up")
             playerY -= 5;
-        }  
+        } 
+        //
+        if(playerX > canvas.width || playerX < 0){
+            playerX = 0;
+            canvas.style.background = "green";
+        }
+        if(playerY > canvas.height || playerY < 0){
+            playerY = 0;
+        }
+        if(playerX > 200 && playerX < 300 && playerY <= 0){ //Swap the 200 and the 300 with a input depending on map    
+            canvas.style.background = "blue";
+        }
         fillCircle(playerX, playerY, r);
         window.requestAnimationFrame(draw);
     }

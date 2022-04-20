@@ -1,19 +1,53 @@
 function loadGame(){
     
     const BALL_RADIUS = 15;
-    const INITIAL_VX = 0.1;     /* X velocity in pixels/msec */
-    const INITIAL_VY = 0.1;     /* Y velocity in pixels/msec */
 
     let canvas = document.getElementById("basicMap");
     let ctx = canvas.getContext("2d");
     let r = BALL_RADIUS;
-    let bx = canvas.width / 2;
-    let by = canvas.height / 2;
-    let vx = INITIAL_VX;
-    let vy = INITIAL_VY;
-    let lastTimestamp = 0;
+    let playerX = canvas.width / 2;//(canvas.width - bx) / 2;
+    let playerY = canvas.height / 2;//(canvas.height - by) / 2;
+    let rightPressed = false;
+    let leftPressed = false;
+    let upPressed = false;
+    let downPressed = false;
 
-    document.addEventListener("keydown",function(keys){
+    // KEYBOARD
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+    function keyDownHandler(e) {
+        if(e.keyCode == 39) {
+            console.log("right");
+            rightPressed = true;
+        }
+        else if(e.keyCode == 37) {
+            console.log("left");
+            leftPressed = true;
+        }
+        if(e.keyCode == 40) {
+            console.log("down");
+            downPressed = true;
+        }
+        else if(e.keyCode == 38) {
+            console.log("up");
+            upPressed = true;
+        }
+    }
+    function keyUpHandler(e) {
+        if(e.keyCode == 39) {
+            rightPressed = false;
+        }
+        else if(e.keyCode == 37) {
+            leftPressed = false;
+        }
+        if(e.keyCode == 40) {
+            downPressed = false;
+        }
+        else if(e.keyCode == 38) {
+            upPressed = false;
+        }
+    }
+    /*document.addEventListener("keydown",function(keys){
         switch(keys.key) {
             case "w":
                 window.requestAnimationFrame(step);
@@ -28,32 +62,9 @@ function loadGame(){
                 window.requestAnimationFrame(step);
                 break;
        }
-    })
+    })*/
                                 
     
-
-
-    function step(timestamp) {
-        let dt = timestamp - lastTimestamp;            
-        if (lastTimestamp === 0) {
-            dt = 0;
-        }
-        
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        fillCircle(bx, by, r);
-        bx += dt * vx;
-        by += dt * vy;
-        if (bx < r || bx > canvas.width - r) {
-            vx = -vx;
-        }
-        if (by < r || by > canvas.height - r) {
-            vy = -vy;
-        }
-        lastTimestamp = timestamp;
-        window.requestAnimationFrame(step);
-        
-    }
 
     function fillCircle(x, y, r, color) {
         ctx.save();
@@ -65,6 +76,26 @@ function loadGame(){
         ctx.fill();
         ctx.restore();
     }
-    
-}
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);   
+        // KEYBOARD
+        if(rightPressed) {
+            playerX += 5;
+        }
+        else if(leftPressed) {
+            playerX -= 5;
+        }
+        if(downPressed) {
+            playerY += 5;
+        }
+        else if(upPressed) {
+            playerY -= 5;
+        }  
+        fillCircle(playerX, playerY, r);
+        window.requestAnimationFrame(draw);
+    }
+    draw();
+}   
+
 

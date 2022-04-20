@@ -16,54 +16,47 @@ function loadGame(){
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
     function keyDownHandler(e) {
-        if(e.keyCode == 39) {
-            console.log("right");
-            rightPressed = true;
-        }
-        else if(e.keyCode == 37) {
-            console.log("left");
-            leftPressed = true;
-        }
-        if(e.keyCode == 40) {
-            console.log("down");
-            downPressed = true;
-        }
-        else if(e.keyCode == 38) {
-            console.log("up");
-            upPressed = true;
-        }
-    }
-    function keyUpHandler(e) {
-        if(e.keyCode == 39) {
-            rightPressed = false;
-        }
-        else if(e.keyCode == 37) {
-            leftPressed = false;
-        }
-        if(e.keyCode == 40) {
-            downPressed = false;
-        }
-        else if(e.keyCode == 38) {
-            upPressed = false;
-        }
-    }
-    /*document.addEventListener("keydown",function(keys){
-        switch(keys.key) {
-            case "w":
-                window.requestAnimationFrame(step);
-                break;
-            case "s":
-                window.requestAnimationFrame(step);
-                break;
-            case "a":
-                window.requestAnimationFrame(step);
-                break;
+        switch(e.key){
+            case "ArrowRight":
+                rightPressed= true;
             case "d":
-                window.requestAnimationFrame(step);
-                break;
-       }
-    })*/
-                                
+                rightPressed= true;
+            case "ArrowLeft":
+                leftPressed = true;
+            case "a":
+                leftPressed = true;
+            case "ArrowDown":
+                downPressed= true;
+            case "s":
+                downPressed= true;
+            case "ArrowUp":
+                upPressed = true;
+            case "w":
+                upPressed = true;
+        }
+    }
+            
+        
+    function keyUpHandler(e) {
+        switch(e.key){
+            case "ArrowRight":
+                rightPressed= false;
+            case "d":
+                rightPressed= false;
+            case "ArrowLeft":
+                leftPressed = false;
+            case "a":
+                leftPressed = false;
+            case "ArrowDown":
+                downPressed= false;
+            case "s":
+                downPressed= false;
+            case "ArrowUp":
+                upPressed = false;
+            case "w":
+                upPressed = false;
+        }
+    }                                
     
 
     function fillCircle(x, y, r, color) {
@@ -80,22 +73,26 @@ function loadGame(){
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);   
         // KEYBOARD
+
         if(rightPressed) {
+            console.log("right")
             playerX += 5;
         }
         else if(leftPressed) {
+            console.log("left")
             playerX -= 5;
         }
-        if(downPressed) {
+        else if(downPressed) {
+            console.log("down")
             playerY += 5;
         }
         else if(upPressed) {
+            console.log("up")
             playerY -= 5;
         }  
         fillCircle(playerX, playerY, r);
         window.requestAnimationFrame(draw);
     }
     draw();
-}   
-
+}
 

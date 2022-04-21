@@ -76,30 +76,42 @@ function loadGame(){
 
         if(rightPressed) {
             console.log("right")
-            playerX += 5;
+            playerX += 2;
         }
         else if(leftPressed) {
             console.log("left")
-            playerX -= 5;
+            playerX -= 2;
         }
         else if(downPressed) {
             console.log("down")
-            playerY += 5;
+            playerY += 2;
         }
         else if(upPressed) {
             console.log("up")
-            playerY -= 5;
+            playerY -= 2;
         } 
-        //
-        if(playerX > canvas.width || playerX < 0){
-            playerX = 0;
+
+        //Collison
+        if(playerX > canvas.width - BALL_RADIUS){
+            playerX =  canvas.width - BALL_RADIUS ;
+        }else if(playerX < BALL_RADIUS){
+            playerX = BALL_RADIUS ;
+        }
+        if(playerY > canvas.height - BALL_RADIUS){
+            playerY = canvas.height - BALL_RADIUS ;
+        }else if(playerY < BALL_RADIUS){
+            playerY = BALL_RADIUS;
+        }
+        
+        if(playerX > 200 && playerX < 300 && playerY === canvas.height - BALL_RADIUS){ //Swap the 200 and the 300 with a input depending on map//this would be for a door at the bottem    
             canvas.style.background = "green";
+        }else if(playerX > 200 && playerX < 300 && playerY === BALL_RADIUS){ //Swap the 200 and the 300 with a input depending on map//this would be for a door at the top    
+            canvas.style.background = "yellow";
         }
-        if(playerY > canvas.height || playerY < 0){
-            playerY = 0;
-        }
-        if(playerX > 200 && playerX < 300 && playerY <= 0){ //Swap the 200 and the 300 with a input depending on map    
+        if(playerY > 75 && playerY < 175 && playerX === canvas.width - BALL_RADIUS){ //Swap the 200 and the 300 with a input depending on map//this would be for a door at the right   
             canvas.style.background = "blue";
+        }else if(playerY > 75 && playerY < 175  && playerX === BALL_RADIUS){ //Swap the 200 and the 300 with a input depending on map//this would be for a door at the left   
+            canvas.style.background = "red";
         }
         fillCircle(playerX, playerY, r);
         window.requestAnimationFrame(draw);

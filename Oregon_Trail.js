@@ -1,16 +1,14 @@
 function loadGame(){
     
     const BALL_RADIUS = 15;
-
     let canvas = document.getElementById("basicMap");
     let ctx = canvas.getContext("2d");
     let r = BALL_RADIUS;
     let playerX = canvas.width / 2;//(canvas.width - bx) / 2;
     let playerY = canvas.height / 2;//(canvas.height - by) / 2;
-    let rightPressed = false;
-    let leftPressed = false;
-    let upPressed = false;
-    let downPressed = false;
+    const keys = {up:{upPressed: false},left:{leftPressed: false},down:{downPressed: false},right:{rightPressed: false}}
+    const map = new Image();
+    map.src = "map.png";
 
     // KEYBOARD
     document.addEventListener("keydown", keyDownHandler, false);
@@ -18,21 +16,29 @@ function loadGame(){
     function keyDownHandler(e) {
         switch(e.key){
             case "ArrowRight":
-                rightPressed= true;
+                keys.right.upPressed = true;
+                break;
             case "d":
-                rightPressed= true;
+                keys.right.upPressed = true;
+                break;
             case "ArrowLeft":
-                leftPressed = true;
+                keys.left.upPressed = true;
+                break;
             case "a":
-                leftPressed = true;
+                keys.left.upPressed = true;
+                break;
             case "ArrowDown":
-                downPressed= true;
+                keys.down.upPressed = true;
+                break;
             case "s":
-                downPressed= true;
+                keys.down.upPressed = true;
+                break;
             case "ArrowUp":
-                upPressed = true;
+                keys.up.upPressed = true;
+                break;
             case "w":
-                upPressed = true;
+                keys.up.upPressed = true;
+                break;
         }
     }
             
@@ -40,21 +46,29 @@ function loadGame(){
     function keyUpHandler(e) {
         switch(e.key){
             case "ArrowRight":
-                rightPressed= false;
+                keys.right.upPressed = false;
+                break;
             case "d":
-                rightPressed= false;
+                keys.right.upPressed = false;
+                break;
             case "ArrowLeft":
-                leftPressed = false;
+                keys.left.upPressed = false;
+                break;
             case "a":
-                leftPressed = false;
+                keys.left.upPressed = false;
+                break;
             case "ArrowDown":
-                downPressed= false;
+                keys.down.upPressed = false;
+                break;
             case "s":
-                downPressed= false;
+                keys.down.upPressed = false;
+                break;
             case "ArrowUp":
-                upPressed = false;
+                keys.up.upPressed = false;
+                break;
             case "w":
-                upPressed = false;
+                keys.up.upPressed = false;
+                break;
         }
     }                                
     
@@ -70,52 +84,58 @@ function loadGame(){
         ctx.restore();
     }
 
-    function draw() {
+    class background{
+        constructor({postiton, velocity, image}){
+            this.postiton = postiton;
+            this.image = image;
+        }
+        draw(){
+            ctx.drawImage(this.image,this.postiton.x, this.postiton.y);
+        }
+    }
+
+    let backdrop = new background({
+        postiton:{
+            x:0,
+            y:0
+        },
+        image: map
+    })
+
+    function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);   
         // KEYBOARD
-
-        if(rightPressed) {
-            console.log("right")
-            playerX += 2;
+        backdrop.draw()
+        if(keys.right.upPressed) {
+            backdrop.postiton.x -= 10;
+            console.log("x"+ backdrop.postiton.x);
         }
-        else if(leftPressed) {
-            console.log("left")
-            playerX -= 2;
+        else if(keys.left.upPressed) {
+            backdrop.postiton.x += 10;
+            console.log("x"+ backdrop.postiton.x);
         }
-        else if(downPressed) {
-            console.log("down")
-            playerY += 2;
+        else if(keys.down.upPressed) {
+            backdrop.postiton.y -= 2;
+            console.log("y"+ backdrop.postiton.y);
         }
-        else if(upPressed) {
-            console.log("up")
-            playerY -= 2;
+        else if(keys.up.upPressed) {
+            backdrop.postiton.y += 2;
+            console.log("y"+ backdrop.postiton.y);
+        }
+        if(backdrop.postiton.x < -3507 + 250  + BALL_RADIUS){
+            backdrop.postiton.x =  -3507 + 250 + BALL_RADIUS ;
+        }else if(backdrop.postiton.x > 250 - BALL_RADIUS){
+            backdrop.postiton.x = 250 - BALL_RADIUS;
+        } 
+        if(backdrop.postiton.y < -2480 + 150 + BALL_RADIUS){
+            backdrop.postiton.y =   -2480 + 150 + BALL_RADIUS;
+        }else if(backdrop.postiton.y > 150 - BALL_RADIUS ){
+            backdrop.postiton.y = 150 - BALL_RADIUS;
         } 
 
-        //Collison
-        if(playerX > canvas.width - BALL_RADIUS){
-            playerX =  canvas.width - BALL_RADIUS ;
-        }else if(playerX < BALL_RADIUS){
-            playerX = BALL_RADIUS ;
-        }
-        if(playerY > canvas.height - BALL_RADIUS){
-            playerY = canvas.height - BALL_RADIUS ;
-        }else if(playerY < BALL_RADIUS){
-            playerY = BALL_RADIUS;
-        }
-        
-        if(playerX > 200 && playerX < 300 && playerY === canvas.height - BALL_RADIUS){ //Swap the 200 and the 300 with a input depending on map//this would be for a door at the bottem    
-            canvas.style.background = "green";
-        }else if(playerX > 200 && playerX < 300 && playerY === BALL_RADIUS){ //Swap the 200 and the 300 with a input depending on map//this would be for a door at the top    
-            canvas.style.background = "yellow";
-        }
-        if(playerY > 75 && playerY < 175 && playerX === canvas.width - BALL_RADIUS){ //Swap the 200 and the 300 with a input depending on map//this would be for a door at the right   
-            canvas.style.background = "blue";
-        }else if(playerY > 75 && playerY < 175  && playerX === BALL_RADIUS){ //Swap the 200 and the 300 with a input depending on map//this would be for a door at the left   
-            canvas.style.background = "red";
-        }
         fillCircle(playerX, playerY, r);
-        window.requestAnimationFrame(draw);
+        window.requestAnimationFrame(animate);
     }
-    draw();
-}
+    animate();
+``}
 

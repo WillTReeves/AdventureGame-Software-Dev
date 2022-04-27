@@ -1,0 +1,20 @@
+
+#basicMap {
+    border: solid 2px black;
+    background: green;
+    width: 60%;
+    height: 60%;
+    position: absolute;
+    margin-left: 20%;
+}
+#playerToken{
+    display: inline-block;
+    height: 5%;
+    width: 5% ;
+    background-color:yellow;
+    position: absolute;
+}
+
+h1 {
+    text-align: center;
+    }

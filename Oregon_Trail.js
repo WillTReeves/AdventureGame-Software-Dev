@@ -4,12 +4,53 @@ function loadGame(){
     let canvas = document.getElementById("basicMap");
     let ctx = canvas.getContext("2d");
     let r = BALL_RADIUS;
-    let playerX = canvas.width / 2;//(canvas.width - bx) / 2;
-    let playerY = canvas.height / 2;//(canvas.height - by) / 2;
-    const keys = {up:{upPressed: false},left:{leftPressed: false},down:{downPressed: false},right:{rightPressed: false}}
-    const map = new Image();
-    map.src = "map.png";
 
+    const keys = {up:{upPressed: false},left:{leftPressed: false},down:{downPressed: false},right:{rightPressed: false}}
+    
+    const map = new Image();
+    map.src = "FordFirstFloorMap.png";
+
+    let hero = new Image();
+    hero.src = "roboto.jpg";
+
+    let collisionMap = [];
+    for(let i =0; i < collisions.length;i += 56){
+        collisionMap.push(collisions.slice(i,56 + i));
+    }
+    class boundary{
+        static square = 88;
+        constructor({position}){
+            this.position = position;
+            this.width = 88
+            this.height = 88
+        }
+        draw(){
+            ctx.fillStyle = 'rgba(255, 0, 0, 0)';
+            ctx.fillRect(this.position.x,this.position.y,this.width,this.height);
+        }
+    }
+
+    let boundaries = [];
+    let offset = {
+        x:-800,
+        y:-1200
+    }
+
+    collisionMap.forEach((row,i) => {
+        row.forEach((symbol,j) =>{
+            if(symbol === 25309){
+                boundaries.push(
+                    new boundary({
+                        position:{
+                            x:j * boundary.square + offset.x, 
+                            y:i * boundary.square + offset.y
+                        }
+                    })
+                )
+            }
+        })
+    });
+    console.log(boundaries);
     // KEYBOARD
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
@@ -41,8 +82,7 @@ function loadGame(){
                 break;
         }
     }
-            
-        
+
     function keyUpHandler(e) {
         switch(e.key){
             case "ArrowRight":
@@ -84,58 +124,163 @@ function loadGame(){
         ctx.restore();
     }
 
-    class background{
-        constructor({postiton, velocity, image}){
-            this.postiton = postiton;
+    class obj{
+        constructor({position, velocity, image}){
+            this.position = position;
             this.image = image;
+            this.image.onload = () => {
+                this.width = this.image.width;
+                this.height = this.image.height;
+                console.log(this.width);
+                console.log(this.height);
+            }
         }
         draw(){
-            ctx.drawImage(this.image,this.postiton.x, this.postiton.y);
+            ctx.drawImage(this.image,this.position.x, this.position.y);
         }
     }
 
-    let backdrop = new background({
-        postiton:{
-            x:0,
-            y:0
+
+    let backdrop = new obj ({
+        position:{
+            x:offset.x,
+            y:offset.y
         },
         image: map
     })
 
+    let player = new obj ({
+        position:{
+            x:canvas.width / 2,
+            y:canvas.height / 2
+        },
+        image: hero
+    })
+
+    let staticobj = [backdrop,...boundaries]
+    
+    function rectangularCollision({ rectangle1, rectangle2 }) {
+        return (
+          rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+          rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
+          rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+          rectangle1.position.y + rectangle1.height >= rectangle2.position.y
+        )
+      }
+    
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);   
-        // KEYBOARD
+        
         backdrop.draw()
+        player.draw()
+
+        let moving = true;
+
+        boundaries.forEach(boundary => {
+            boundary.draw();
+        })
+
+
         if(keys.right.upPressed) {
-            backdrop.postiton.x -= 10;
-            console.log("x"+ backdrop.postiton.x);
+            for (let i = 0; i < boundaries.length; i++) {
+                const boundary = boundaries[i]
+                if (
+                  rectangularCollision({
+                    rectangle1: player,
+                    rectangle2: {
+                      ...boundary,
+                      position: {
+                        x: boundary.position.x - 5,
+                        y: boundary.position.y 
+                      }
+                    }
+                  })
+                ) {
+                    moving = false;
+                    break;
+                }
+              }
+          
+            if (moving)
+              staticobj.forEach((staticobj) => {
+                staticobj.position.x -= 5;
+                })
         }
         else if(keys.left.upPressed) {
-            backdrop.postiton.x += 10;
-            console.log("x"+ backdrop.postiton.x);
+            for (let i = 0; i < boundaries.length; i++) {
+                const boundary = boundaries[i]
+                if (
+                  rectangularCollision({
+                    rectangle1: player,
+                    rectangle2: {
+                      ...boundary,
+                      position: {
+                        x: boundary.position.x + 5,
+                        y: boundary.position.y 
+                      }
+                    }
+                  })
+                ) {
+                    moving = false;
+                    break;
+                }
+              }
+            if (moving)
+              staticobj.forEach((staticobj) => {
+                staticobj.position.x += 5;
+                })
         }
         else if(keys.down.upPressed) {
-            backdrop.postiton.y -= 2;
-            console.log("y"+ backdrop.postiton.y);
+            for (let i = 0; i < boundaries.length; i++) {
+                const boundary = boundaries[i]
+                if (
+                  rectangularCollision({
+                    rectangle1: player,
+                    rectangle2: {
+                      ...boundary,
+                      position: {
+                        x: boundary.position.x,
+                        y: boundary.position.y - 5
+                      }
+                    }
+                  })
+                ) {
+                    moving = false;
+                    break;
+                }
+              }
+          
+            if (moving)
+              staticobj.forEach((staticobj) => {
+                staticobj.position.y -= 5;
+                })
         }
         else if(keys.up.upPressed) {
-            backdrop.postiton.y += 2;
-            console.log("y"+ backdrop.postiton.y);
+            for (let i = 0; i < boundaries.length; i++) {
+                const boundary = boundaries[i]
+                if (
+                  rectangularCollision({
+                    rectangle1: player,
+                    rectangle2: {
+                      ...boundary,
+                      position: {
+                        x: boundary.position.x,
+                        y: boundary.position.y + 5
+                      }
+                    }
+                  })
+                ) {
+                    moving = false;
+                    break;
+                }
+              }
+            if (moving)
+              staticobj.forEach((staticobj) => {
+                staticobj.position.y += 5;
+                })
         }
-        if(backdrop.postiton.x < -3507 + 250  + BALL_RADIUS){
-            backdrop.postiton.x =  -3507 + 250 + BALL_RADIUS ;
-        }else if(backdrop.postiton.x > 250 - BALL_RADIUS){
-            backdrop.postiton.x = 250 - BALL_RADIUS;
-        } 
-        if(backdrop.postiton.y < -2480 + 150 + BALL_RADIUS){
-            backdrop.postiton.y =   -2480 + 150 + BALL_RADIUS;
-        }else if(backdrop.postiton.y > 150 - BALL_RADIUS ){
-            backdrop.postiton.y = 150 - BALL_RADIUS;
-        } 
-
-        fillCircle(playerX, playerY, r);
         window.requestAnimationFrame(animate);
     }
     animate();
-``}
+}
 

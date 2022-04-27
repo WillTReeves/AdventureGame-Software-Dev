@@ -111,18 +111,7 @@ function loadGame(){
                 break;
         }
     }                                
-    
 
-    function fillCircle(x, y, r, color) {
-        ctx.save();
-        if (color !== undefined) {
-            ctx.fillStyle = color;
-        }
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.restore();
-    }
 
     class obj{
         constructor({position, velocity, image}){
@@ -141,24 +130,32 @@ function loadGame(){
     }
     
     class char{
-        constructor({postiton, velocity, image}){
-            this.postiton = postiton;
+        constructor({position, velocity, image}){
+            this.position = position;
             this.image = image;
+            this.image.onload = () => {
+                this.width = this.image.width;
+                this.height = this.image.height;
+                console.log(this.width);
+                console.log(this.height);
+            }
         }
         draw(){
             ctx.drawImage(this.image,
-                this.image.width/24*23,
-                0,
-                this.image.width,
-                this.image.height,
-                canvas.width/2-this.image.width/48,
-                this.image.height/2 ,
-                this.postiton.x+100,
-                this.postiton.y,
+                this.image.width/24*23, 0, 
+                this.image.width/24,this.image.height, 
+                this.position.x-canvas.width/18, this.position.y-canvas.height/12, 
+                canvas.width/9,canvas.height/6 
                 );
         }
     }
-
+    let player = new char ({
+        position:{
+            x: canvas.width / 2,
+            y: canvas.height / 2
+        },
+        image: hero
+    })
 
     let backdrop = new obj ({
         position:{
@@ -168,13 +165,7 @@ function loadGame(){
         image: map
     })
 
-    let player = new char ({
-        position:{
-            x:canvas.width / 2,
-            y:canvas.height / 2
-        },
-        image: hero
-    })
+    
 
     let staticobj = [backdrop,...boundaries]
     

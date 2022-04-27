@@ -11,7 +11,7 @@ function loadGame(){
     map.src = "FordFirstFloorMap.png";
 
     let hero = new Image();
-    hero.src = "roboto.jpg";
+    hero.src = "Alex_run_48x48.png";
 
     let collisionMap = [];
     for(let i =0; i < collisions.length;i += 56){
@@ -139,6 +139,25 @@ function loadGame(){
             ctx.drawImage(this.image,this.position.x, this.position.y);
         }
     }
+    
+    class char{
+        constructor({postiton, velocity, image}){
+            this.postiton = postiton;
+            this.image = image;
+        }
+        draw(){
+            ctx.drawImage(this.image,
+                this.image.width/24*23,
+                0,
+                this.image.width,
+                this.image.height,
+                canvas.width/2-this.image.width/48,
+                this.image.height/2 ,
+                this.postiton.x+100,
+                this.postiton.y,
+                );
+        }
+    }
 
 
     let backdrop = new obj ({
@@ -149,7 +168,7 @@ function loadGame(){
         image: map
     })
 
-    let player = new obj ({
+    let player = new char ({
         position:{
             x:canvas.width / 2,
             y:canvas.height / 2

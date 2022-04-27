@@ -11,14 +11,14 @@ function loadGame(){
     map.src = "FordFirstFloorMap.png";
 
     let hero = new Image();
-    hero.src = "Alex_run_48x48.png";
+    hero.src = "Alex_run.png";
 
     let collisionMap = [];
     for(let i =0; i < collisions.length;i += 56){
         collisionMap.push(collisions.slice(i,56 + i));
     }
     class boundary{
-        static square = 88;
+        static square = 88; 
         constructor({position}){
             this.position = position;
             this.width = 88
@@ -130,7 +130,7 @@ function loadGame(){
     }
     
     class char{
-        constructor({position, image, size}){
+        constructor({position, image, size, }){
             this.position = position;
             this.image = image;
             this.size = size;
@@ -143,10 +143,14 @@ function loadGame(){
         }
         draw(){
             ctx.drawImage(this.image,
-                this.image.width/24*23, 0, 
-                this.image.width/24,this.image.height, 
-                this.position.x-canvas.width/18, this.position.y-canvas.height/12, 
-                this.size.x, this.size.y
+                //this.image.width/24*23, 
+                //0, 
+                //this.image.width/24,
+                //this.image.height, 
+                this.position.x-canvas.width/18, 
+                this.position.y-canvas.height/12, 
+                this.size.x, 
+                this.size.y
                 );
         }
     }
@@ -236,6 +240,7 @@ function loadGame(){
                     }
                   })
                 ) {
+                    console.log("coliding")
                     moving = false;
                     break;
                 }

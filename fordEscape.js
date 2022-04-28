@@ -16,6 +16,9 @@ function loadGame(){
 
     let playerIdle = new Image();
     playerIdle.src = "Alex_idle_anim_48x48.png"
+    
+    let ericPic = new Image
+    ericPic.src = "Old_man_Josh_reading_48x48.png"
 
     let collisionMap = [];
     for(let i =0; i < collisions.length;i += 56){
@@ -200,7 +203,34 @@ function loadGame(){
                 }
             }
     }
+        class prof{
+        constructor({position, image, size, maxs}){
+            this.position = position;
+            this.image = image;
+            this.size = size;
+            this.frames = {max:maxs, val:0, ela: 0};
+        }
+        draw(){
+            ctx.drawImage(this.image,
+                this.image.width/18*this.frames.val , 0, 
+                this.image.width/18,this.image.height, 
+                this.position.x, this.position.y, 
+                this.size.x, this.size.y);
+            
+            if(this.frames.max > 1){
+                this.frames.ela++;
+            }
+
+            if(this.frames.ela % 10 ===0){
+                if(this.frames.val < this.frames.max){
+                    this.frames.val++}
+                else{
+                    this.frames.val = 0}
+                }
+            }
+
         
+    }   
         
     let player = new char ({
         position:{
@@ -213,6 +243,18 @@ function loadGame(){
             x:canvas.width/9,
             y:canvas.height/3
         }
+    })
+        let eric = new prof({
+        position:{
+            x:20,
+            y:300
+        },
+        image: ericPic,
+        size:{
+            x:humwidth,
+            y:humheight
+        },
+        maxs:17
     })
 
     let backdrop = new obj ({
@@ -240,7 +282,7 @@ function loadGame(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);   
         
         backdrop.draw()
-        player.draw()
+        player.drawIm()
 
         let moving = true;
 

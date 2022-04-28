@@ -5,6 +5,8 @@ function loadGame(){
     let ctx = canvas.getContext("2d");
     let r = BALL_RADIUS;
     let prevdir = "s";
+    let humwidth = canvas.width/9
+    let humwidth = canvas.height/12
 
     const keys = {up:{upPressed: false},left:{leftPressed: false},down:{downPressed: false},right:{rightPressed: false}}
     

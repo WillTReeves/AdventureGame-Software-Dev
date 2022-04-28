@@ -4,14 +4,18 @@ function loadGame(){
     let canvas = document.getElementById("basicMap");
     let ctx = canvas.getContext("2d");
     let r = BALL_RADIUS;
+    let prevdir = "s";
 
     const keys = {up:{upPressed: false},left:{leftPressed: false},down:{downPressed: false},right:{rightPressed: false}}
     
     const map = new Image();
     map.src = "FordFirstFloorMap.png";
+    
+    let playerRun = new Image();
+    playerRun.src = "Alex_run_48x48.png";
 
-    let hero = new Image();
-    hero.src = "Alex_run.png";
+    let playerIdle = new Image();
+    playerIdle.src = "Alex_idle_anim_48x48.png"
 
     let collisionMap = [];
     for(let i =0; i < collisions.length;i += 56){
@@ -58,27 +62,35 @@ function loadGame(){
         switch(e.key){
             case "ArrowRight":
                 keys.right.upPressed = true;
+                prevdir = "r";
                 break;
             case "d":
                 keys.right.upPressed = true;
+                prevdir = "r";
                 break;
             case "ArrowLeft":
                 keys.left.upPressed = true;
+                prevdir = "l";
                 break;
             case "a":
                 keys.left.upPressed = true;
+                prevdir = "l";
                 break;
             case "ArrowDown":
                 keys.down.upPressed = true;
+                prevdir = "s";
                 break;
             case "s":
                 keys.down.upPressed = true;
+                prevdir = "s";
                 break;
             case "ArrowUp":
                 keys.up.upPressed = true;
+                prevdir = "w";
                 break;
             case "w":
                 keys.up.upPressed = true;
+                prevdir = "w";
                 break;
         }
     }
@@ -130,36 +142,73 @@ function loadGame(){
     }
     
     class char{
-        constructor({position, image, size, }){
+        constructor({position, image, image2, size, frames = {max:5}}){
             this.position = position;
             this.image = image;
+            this.image2 = image2;
             this.size = size;
-            this.image.onload = () => {
-                this.width = this.image.width;
-                this.height = this.image.height;
-                console.log(this.width);
-                console.log(this.height);
+            this.dir = 18;
+            this.frames = {...frames, val:0, ela: 0};
+        }
+        drawIm(){
+            switch(prevdir){
+                case"r":
+                    this.dir = 0;
+                    this.draw();
+                    break;
+
+                case"l":
+                    this.dir = 12;
+                    this.draw();
+                    break;
+
+                case"s":
+                    this.dir = 18;
+                    this.draw();
+                    break;
+
+                case"w":
+                    this.dir = 6;
+                    this.draw();
+                    break;
             }
         }
-        draw(){
-            ctx.drawImage(this.image,
-                //this.image.width/24*23, 
-                //0, 
-                //this.image.width/24,
-                //this.image.height, 
-                this.position.x-canvas.width/18, 
-                this.position.y-canvas.height/12, 
-                this.size.x, 
-                this.size.y
-                );
-        }
+        draw(){ 
+            if(keys.right.upPressed||keys.left.upPressed||keys.down.upPressed||keys.up.upPressed){
+            ctx.drawImage(this.image2,
+                this.image.width/24*this.frames.val + this.dir *this.image.width/24 , 0, 
+                this.image.width/24,this.image.height, 
+                this.position.x-canvas.width/18, this.position.y-canvas.height/12, 
+                this.size.x, this.size.y);
+            }
+            else{
+                ctx.drawImage(this.image,
+                    this.image.width/24*this.frames.val + this.dir *this.image.width/24 , 0, 
+                    this.image.width/24,this.image.height, 
+                    this.position.x-canvas.width/18, this.position.y-canvas.height/12, 
+                    this.size.x, this.size.y);
+            }
+            if(this.frames.max > 1){
+                this.frames.ela++;
+            }
+
+            if(this.frames.ela % 10 ===0){
+                if(this.frames.val < this.frames.max){
+                    this.frames.val++}
+                else{
+                    this.frames.val = 0}
+                }
+            }
     }
+        
+        
     let player = new char ({
         position:{
             x: canvas.width / 2,
             y: canvas.height / 2
         },
-        image: hero,
+        image: playerIdle,
+        image2:playerRun,
         size:{
             x:canvas.width/9,
             y:canvas.height/3

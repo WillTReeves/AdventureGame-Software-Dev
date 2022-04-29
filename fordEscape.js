@@ -28,6 +28,9 @@ function loadGame(){
 
     let mood = new Image()
     mood.src = "Mood_changer_squeeze_48x48.png"
+
+    let stu = new Image()
+    mood.src = "Witch_idle_anim_48x48.png"
     
 
     let collisionMap = [];
@@ -306,6 +309,19 @@ function loadGame(){
         },
         maxs: 2
 
+    })
+
+    let stud = new prof({
+        position:{
+            x:300,
+            y:-700
+        },
+        image: stu,
+        size:{
+            x:100,
+            y:50
+        },
+        maxs: 5
     })
 
     let backdrop = new obj ({

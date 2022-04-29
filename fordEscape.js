@@ -1,9 +1,7 @@
 function loadGame(){
     
-    const BALL_RADIUS = 15;
     let canvas = document.getElementById("basicMap");
     let ctx = canvas.getContext("2d");
-    let r = BALL_RADIUS;
     let prevdir = "s";
     let humwidth = canvas.width/12
     let humheight = canvas.height/4
@@ -27,14 +25,14 @@ function loadGame(){
         collisionMap.push(collisions.slice(i,56 + i));
     }
     class boundary{
-        static square = 88; 
+        static square = 64; 
         constructor({position}){
             this.position = position;
-            this.width = 88
-            this.height = 88
+            this.width = 64
+            this.height = 64
         }
         draw(){
-            ctx.fillStyle = 'rgba(255, 0, 0, 0)';
+            //ctx.fillStyle = 'rgba(255, 0, 0, 0)';
             ctx.fillRect(this.position.x,this.position.y,this.width,this.height);
         }
     }
@@ -42,7 +40,7 @@ function loadGame(){
     let boundaries = [];
     let offset = {
         x:-800,
-        y:-1200
+        y:-1000
     }
 
     collisionMap.forEach((row,i) => {
@@ -205,7 +203,7 @@ function loadGame(){
                 }
             }
     }
-        class prof{
+    class prof{
         constructor({position, image, size, maxs}){
             this.position = position;
             this.image = image;
@@ -246,10 +244,10 @@ function loadGame(){
             y:humheight
         }
     })
-        let eric = new prof({
+    let eric = new prof({
         position:{
-            x:20,
-            y:300
+            x:-200,
+            y: 464
         },
         image: ericPic,
         size:{
@@ -269,7 +267,7 @@ function loadGame(){
 
     
 
-    let staticobj = [backdrop,...boundaries]
+    let staticobj = [backdrop,...boundaries,eric];
     
     function rectangularCollision({ rectangle1, rectangle2 }) {
         return (
@@ -309,6 +307,7 @@ function loadGame(){
                     }
                   })
                 ) {
+                    console.log("col");
                     moving = false;
                     break;
                 }
@@ -359,6 +358,7 @@ function loadGame(){
                     }
                   })
                 ) {
+                    console.log("col");
                     moving = false;
                     break;
                 }
@@ -384,6 +384,7 @@ function loadGame(){
                     }
                   })
                 ) {
+                    console.log("col");
                     moving = false;
                     break;
                 }

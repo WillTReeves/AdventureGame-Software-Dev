@@ -218,12 +218,13 @@ function loadGame(){
             this.position = position;
             this.image = image;
             this.size = size;
+            this.max = maxs+1
             this.frames = {max:maxs, val:0, ela: 0};
         }
         draw(){
             ctx.drawImage(this.image,
-                this.image.width/18*this.frames.val , 0, 
-                this.image.width/18,this.image.height, 
+                this.image.width/this.max*this.frames.val , 0, 
+                this.image.width/this.max,this.image.height, 
                 this.position.x, this.position.y, 
                 this.size.x, this.size.y);
             
@@ -336,7 +337,7 @@ function loadGame(){
         r.draw()
         jamis.draw()
         calvin.draw()
-        moods.draw
+        moods.draw()
         
         
 

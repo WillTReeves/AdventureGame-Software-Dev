@@ -17,8 +17,18 @@ function loadGame(){
     let playerIdle = new Image();
     playerIdle.src = "Alex_idle_anim_48x48.png"
     
-    let ericPic = new Image
-    ericPic.src = "Old_man_Josh_reading_48x48.png"
+    let rPic = new Image()
+    rPic.src = "Old_man_Josh_reading_48x48.png";
+
+    let jPic = new Image()
+    jPic.src = "Conference_man_phone_48x48.png";
+
+    let cPic  = new Image()
+    cPic.src = "Bruce_idle_anim_48x48.png";
+
+    let mood = new Image()
+    mood.src = "Mood_changer_squeeze_48x48.png"
+    
 
     let collisionMap = [];
     for(let i =0; i < collisions.length;i += 56){
@@ -244,17 +254,57 @@ function loadGame(){
             y:humheight
         }
     })
-    let eric = new prof({
+    let r = new prof({
         position:{
             x:-200,
             y: 464
         },
-        image: ericPic,
+        image: rPic,
         size:{
             x:humwidth,
             y:humheight
         },
         maxs:17
+    })
+
+    let jamis = new prof({
+        position:{
+            x:1960,
+            y:-500
+        },
+        image: jPic,
+        size:{
+            x:humwidth,
+            y:humheight
+        },
+        maxs: 8
+    })
+
+    let calvin = new prof({
+        position:{
+            x:1850,
+            y:-500
+        },
+        image: cPic,
+        size:{
+            x:humwidth,
+            y:humheight
+        },
+        maxs: 5
+    })
+
+    let moods = new prof({
+        position:{
+            x:1865,
+            y:-520
+        },
+        image: mood,
+        size:{
+            x:100,
+            y:50
+        },
+        maxs: 2
+
     })
 
     let backdrop = new obj ({
@@ -267,7 +317,7 @@ function loadGame(){
 
     
 
-    let staticobj = [backdrop,...boundaries,eric];
+    let staticobj = [backdrop,...boundaries,r,jamis,calvin,moods];
     
     function rectangularCollision({ rectangle1, rectangle2 }) {
         return (
@@ -283,7 +333,12 @@ function loadGame(){
         
         backdrop.draw()
         player.drawIm()
-        eric.draw()
+        r.draw()
+        jamis.draw()
+        calvin.draw()
+        moods.draw
+        
+        
 
         let moving = true;
 

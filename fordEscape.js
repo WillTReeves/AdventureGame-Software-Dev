@@ -35,6 +35,9 @@ function loadGame(){
     let j = new Image()
     j.src = "Old_woman_Jenny_reading_48x48.png"
 
+    let re = new Image()
+    re.src = "Ash_sit3_48x48.png"
+
     let collisionMap = [];
     for(let i =0; i < collisions.length;i += 56){
         collisionMap.push(collisions.slice(i,56 + i));
@@ -209,7 +212,7 @@ function loadGame(){
                 this.frames.ela++;
             }
 
-            if(this.frames.ela % 10 ===0){
+            if(this.frames.ela % 20 ===0){
                 if(this.frames.val < this.frames.max){
                     this.frames.val++}
                 else{
@@ -236,7 +239,7 @@ function loadGame(){
                 this.frames.ela++;
             }
 
-            if(this.frames.ela % 10 ===0){
+            if(this.frames.ela % 20 ===0){
                 if(this.frames.val < this.frames.max){
                     this.frames.val++}
                 else{
@@ -338,6 +341,19 @@ function loadGame(){
         maxs: 17
     })
 
+    let ret = new prof({
+        position:{
+            x:2600,
+            y:850
+        },
+        image: re,
+        size:{
+            x:humwidth,
+            y:humheight
+        },
+        maxs: 5
+    })
+
     let backdrop = new obj ({
         position:{
             x:offset.x,
@@ -346,7 +362,7 @@ function loadGame(){
         image: map
     })
 
-    let staticobj = [backdrop,...boundaries,r,jamis,calvin,moods,stud,jen ];
+    let staticobj = [backdrop,...boundaries,r,jamis,calvin,moods,stud,jen,ret ];
     
     function rectangularCollision({ rectangle1, rectangle2 }) {
         return (
@@ -368,6 +384,7 @@ function loadGame(){
         moods.draw()
         stud.draw()
         jen.draw()
+        ret.draw()
 
         let moving = true;
 

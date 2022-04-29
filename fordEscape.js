@@ -17,8 +17,20 @@ function loadGame(){
     let playerIdle = new Image();
     playerIdle.src = "Alex_idle_anim_48x48.png"
     
-    let ericPic = new Image
-    ericPic.src = "Old_man_Josh_reading_48x48.png"
+    let rPic = new Image()
+    rPic.src = "Old_man_Josh_reading_48x48.png";
+
+    let jPic = new Image()
+    jPic.src = "Conference_man_phone_48x48.png";
+
+    let cPic  = new Image()
+    cPic.src = "Bruce_idle_anim_48x48.png";
+
+    let mood = new Image()
+    mood.src = "Mood_changer_squeeze_48x48.png"
+
+    let stu = new Image()
+    stu.src = "Witch_idle_anim_48x48.png"
 
     let collisionMap = [];
     for(let i =0; i < collisions.length;i += 56){
@@ -207,12 +219,13 @@ function loadGame(){
             this.position = position;
             this.image = image;
             this.size = size;
+            this.max = maxs+1
             this.frames = {max:maxs, val:0, ela: 0};
         }
         draw(){
             ctx.drawImage(this.image,
-                this.image.width/18*this.frames.val , 0, 
-                this.image.width/18,this.image.height, 
+                this.image.width/this.max*this.frames.val , 0, 
+                this.image.width/this.max,this.image.height, 
                 this.position.x, this.position.y, 
                 this.size.x, this.size.y);
             
@@ -243,17 +256,70 @@ function loadGame(){
             y:humheight
         }
     })
-    let eric = new prof({
+    let r = new prof({
         position:{
             x:-200,
             y: 464
         },
-        image: ericPic,
+        image: rPic,
         size:{
             x:humwidth,
             y:humheight
         },
         maxs:17
+    })
+
+    let jamis = new prof({
+        position:{
+            x:1960,
+            y:-500
+        },
+        image: jPic,
+        size:{
+            x:humwidth,
+            y:humheight
+        },
+        maxs: 8
+    })
+
+    let calvin = new prof({
+        position:{
+            x:1850,
+            y:-500
+        },
+        image: cPic,
+        size:{
+            x:humwidth,
+            y:humheight
+        },
+        maxs: 5
+    })
+
+    let moods = new prof({
+        position:{
+            x:1865,
+            y:-520
+        },
+        image: mood,
+        size:{
+            x:100,
+            y:50
+        },
+        maxs: 2
+
+    })
+
+    let stud = new prof({
+        position:{
+            x:30,
+            y:-785
+        },
+        image: stu,
+        size:{
+            x:humwidth,
+            y:humheight
+        },
+        maxs: 5
     })
 
     let backdrop = new obj ({
@@ -264,7 +330,7 @@ function loadGame(){
         image: map
     })
 
-    let staticobj = [backdrop,...boundaries, eric];
+    let staticobj = [backdrop,...boundaries,r,jamis,calvin,moods,stud ];
     
     function rectangularCollision({ rectangle1, rectangle2 }) {
         return (
@@ -280,7 +346,11 @@ function loadGame(){
         
         backdrop.draw()
         player.drawIm()
-        eric.draw()
+        r.draw()
+        jamis.draw()
+        calvin.draw()
+        moods.draw()
+        stud.draw()
 
         let moving = true;
 

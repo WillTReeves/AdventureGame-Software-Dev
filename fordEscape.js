@@ -5,8 +5,8 @@ function loadGame(){
     let ctx = canvas.getContext("2d");
     let r = BALL_RADIUS;
     let prevdir = "s";
-    let humwidth = canvas.width/9
-    let humwidth = canvas.height/12
+    let humwidth = canvas.width/12
+    let humheight = canvas.height/4
 
     const keys = {up:{upPressed: false},left:{leftPressed: false},down:{downPressed: false},right:{rightPressed: false}}
     
@@ -242,8 +242,8 @@ function loadGame(){
         image: playerIdle,
         image2:playerRun,
         size:{
-            x:canvas.width/9,
-            y:canvas.height/3
+            x:humwidth,
+            y:humheight
         }
     })
         let eric = new prof({
@@ -285,6 +285,7 @@ function loadGame(){
         
         backdrop.draw()
         player.drawIm()
+        eric.draw()
 
         let moving = true;
 

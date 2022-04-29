@@ -31,6 +31,9 @@ function loadGame(){
 
     let stu = new Image()
     stu.src = "Witch_idle_anim_48x48.png"
+    
+    let j = new Image()
+    j.src = "Old_woman_Jenny_reading_48x48.png"
 
     let collisionMap = [];
     for(let i =0; i < collisions.length;i += 56){
@@ -322,6 +325,19 @@ function loadGame(){
         maxs: 5
     })
 
+    let jen = new prof({
+        position:{
+            x:610,
+            y:-520
+        },
+        image: j,
+        size:{
+            x:humwidth,
+            y:humheight
+        },
+        maxs: 17
+    })
+
     let backdrop = new obj ({
         position:{
             x:offset.x,
@@ -330,7 +346,7 @@ function loadGame(){
         image: map
     })
 
-    let staticobj = [backdrop,...boundaries,r,jamis,calvin,moods,stud ];
+    let staticobj = [backdrop,...boundaries,r,jamis,calvin,moods,stud,jen ];
     
     function rectangularCollision({ rectangle1, rectangle2 }) {
         return (
@@ -351,6 +367,7 @@ function loadGame(){
         calvin.draw()
         moods.draw()
         stud.draw()
+        jen.draw()
 
         let moving = true;
 
